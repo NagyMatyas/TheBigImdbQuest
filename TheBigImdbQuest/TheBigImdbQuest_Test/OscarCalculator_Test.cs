@@ -3,13 +3,8 @@ using TheBigImdbQuest;
 
 namespace TheBigImdbQuest_Test
 {
-    public class Tests
+    public class OscarCalculator_Tests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         [TestCase( 0, 0.0)]
         [TestCase( 1, 0.3)]
@@ -23,7 +18,7 @@ namespace TheBigImdbQuest_Test
         [TestCase( 9, 1.0)]
         [TestCase(10, 1.0)]
         [TestCase(11, 1.5)]
-        public void Test_Pass(int nrOfOscars, double reward)
+        public void GivenNumberOfOscarsHasBeenWon_ExpectToReturnTheRewardPoint(int nrOfOscars, double reward)
         {
             Assert.AreEqual(reward, OscarCalculator.GetOscarRewards(nrOfOscars));
         }
