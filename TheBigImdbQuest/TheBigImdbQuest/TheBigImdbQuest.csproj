@@ -43,10 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Movie.cs" />
     <Compile Include="OscarCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReviewPenalizer.cs" />
+    <Compile Include="Scraper.cs" />
+    <Compile Include="ScraperController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
