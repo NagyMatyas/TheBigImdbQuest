@@ -8,6 +8,15 @@ namespace TheBigImdbQuest
 {
     public class Movie
     {
+        public Movie(string title, double originalRating, double recalculatedRating, int nrOfRatings, int nrOfOscars)
+        {
+            Title = title;
+            OriginalRating = originalRating;
+            RecalculatedRating = recalculatedRating;
+            NrOfRatings = nrOfRatings;
+            NrOfOscars = nrOfOscars;
+        }
+
         public string Title { get; }
         public double OriginalRating { get; }
         public double RecalculatedRating { get; }
