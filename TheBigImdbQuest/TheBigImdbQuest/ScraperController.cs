@@ -6,7 +6,7 @@ namespace TheBigImdbQuest
 {
     class ScraperController
     {
-        readonly string baseUrl = @"https://www.imdb.com/";
+        readonly string baseUrl = @"https://www.imdb.com";
 
         public async Task<string> GetUrlAsync(string url)
         {
@@ -23,7 +23,7 @@ namespace TheBigImdbQuest
             {
                 async Task<string> func()
                 {
-                    return await GetUrlAsync(baseUrl + urlPostfix);
+                    return await GetUrlAsync(baseUrl + post);
                 }
 
                 tasks.Add(func());
