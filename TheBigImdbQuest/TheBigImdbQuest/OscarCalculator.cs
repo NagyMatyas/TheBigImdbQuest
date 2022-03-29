@@ -1,33 +1,27 @@
-﻿namespace TheBigImdbQuest
+﻿using System.Collections.Generic;
+
+namespace TheBigImdbQuest
 {
     public static class OscarCalculator
     {
+        private static readonly Dictionary<int, double> oscrarRewards = new Dictionary<int, double>
+        {
+            {  0, 0.0 },
+            {  1, 0.3 },
+            {  2, 0.3 },
+            {  3, 0.5 },
+            {  4, 0.5 },
+            {  5, 0.5 },
+            {  6, 1.0 },
+            {  7, 1.0 },
+            {  8, 1.0 },
+            {  9, 1.0 },
+            { 10, 1.0 },
+        };
+
         public static double GetOscarRewards(int nrOfOscars)
         {
-            double reward;
-
-            if (nrOfOscars == 0)
-            {
-                reward = 0;
-            }
-            else if (nrOfOscars <= 2)
-            {
-                reward = 0.3;
-            }
-            else if (nrOfOscars <= 5)
-            {
-                reward = 0.5;
-            }
-            else if (nrOfOscars <= 10)
-            {
-                reward = 1.0;
-            }
-            else
-            {
-                reward = 1.5;
-            }
-
-            return reward;
+            return oscrarRewards.TryGetValue(nrOfOscars, out double reward) ? reward : 1.5;
         }
     }
 }

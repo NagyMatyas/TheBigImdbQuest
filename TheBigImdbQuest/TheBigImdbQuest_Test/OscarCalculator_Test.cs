@@ -18,6 +18,7 @@ namespace TheBigImdbQuest_Test
         [TestCase( 9, 1.0)]
         [TestCase(10, 1.0)]
         [TestCase(11, 1.5)]
+        [TestCase(99, 1.5)]
         public void GivenNumberOfOscarsHasBeenWon_ExpectToReturnTheRewardPoint(int nrOfOscars, double reward)
         {
             Assert.AreEqual(reward, OscarCalculator.GetOscarRewards(nrOfOscars));
