@@ -48,8 +48,6 @@ namespace TheBigImdbQuest
             int[] nrOfVotes = GetNrOfVotes(htmlDoc);
             int[] oscarList = GetOscars(linkTopMovies);
 
-
-
             Parallel.For(0, movies.Length, i =>
             {
                 movies[i] = new Movie
@@ -79,7 +77,7 @@ namespace TheBigImdbQuest
         private double[] GetRates(HtmlDocument htmlDoc)
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectRate"])
-                .Select(n => double.TryParse(n.Attributes["data-value"].Value,
+                .Select(n => double.TryParse(n.Attributes["data-value"].Value.Substring(0,3),
                                              NumberStyles.Number,
                                              CultureInfo.InvariantCulture,
                                              out double tmp) ? tmp : 0)
@@ -96,7 +94,7 @@ namespace TheBigImdbQuest
         private int[] GetOscars(string[] linkTopMovies)
         {
             return ScraperController.GetUrlAsync(linkTopMovies).Result
-                .Where(n => n != null )
+                .Where(n => n != null)
                 .Select(n => GetOscars(n)).ToArray();
         }
 
