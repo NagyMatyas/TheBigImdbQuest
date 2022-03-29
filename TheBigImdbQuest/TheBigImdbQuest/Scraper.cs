@@ -57,7 +57,7 @@ namespace TheBigImdbQuest
                     Title = titleTopMovies[i],
                     OriginalRating = rate[i],
                     NrOfRatings = nrOfVotes[i],
-                    NrOfOscars = oscarList[i]
+                    NrOfOscars = oscarList[i],
                 };
             });
         }
@@ -79,15 +79,20 @@ namespace TheBigImdbQuest
         private double[] GetRates(HtmlDocument htmlDoc)
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectRate"])
-                .Select(n => double.TryParse(n.Attributes["data-value"].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out double tmp) ? tmp : 0)
+                .Select(n => double.TryParse(n.Attributes["data-value"].Value,
+                                             NumberStyles.Number,
+                                             CultureInfo.InvariantCulture,
+                                             out double tmp) ? tmp : 0)
                 .Take(movies.Length).ToArray();
         }
+
         private int[] GetNrOfVotes(HtmlDocument htmlDoc)
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectVotes"])
                 .Select(n => int.TryParse(n.Attributes["data-value"].Value, out int tmp) ? tmp : 0)
                 .Take(movies.Length).ToArray();
         }
+
         private int[] GetOscars(string[] linkTopMovies)
         {
             return ScraperController.GetUrlAsync(linkTopMovies).Result
