@@ -11,10 +11,10 @@ namespace TheBigImdbQuest
 
         private Movie[] movies;
 
-        IDataSaver saver;
-        Scraper scraper;
+        readonly IDataSaver saver;
+        readonly Scraper scraper;
 
-        public TheBigImdbQuest(Scraper scraper, IDataSaver saver)
+        public TheBigImdbQuest(Scraper scraper, IDataSaver saver = null)
         {
             this.saver = saver;
             this.scraper = scraper;
@@ -30,12 +30,12 @@ namespace TheBigImdbQuest
 
             Parallel.ForEach(movies, movie =>
             {
-                movie.RecalculatedRating = movie.NrOfRatings;
+                movie.RecalculatedRating = movie.OriginalRating;
                 movie.RecalculatedRating += OscarCalculator.GetOscarRewards(movie.NrOfOscars);
                 movie.RecalculatedRating -= penalizer.GetReviewPenalty(maxNrOfVotes, movie.NrOfRatings);
             });
 
-            saver.SaveFile(movies);
+            saver?.SaveFile(movies);
         }
     }
 }

@@ -6,11 +6,11 @@
         {
             double reward;
 
-            if(nrOfOscars == 0)
+            if (nrOfOscars == 0)
             {
                 reward = 0;
             }
-            else if(nrOfOscars <= 2)
+            else if (nrOfOscars <= 2)
             {
                 reward = 0.3;
             }
