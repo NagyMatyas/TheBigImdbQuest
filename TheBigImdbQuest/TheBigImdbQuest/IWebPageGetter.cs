@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace TheBigImdbQuest
 {
-    interface IWebPageGetter
+    public interface IWebPageGetter
     {
         Task<string> GetWebPageAsync(string url);
         Task<List<string>> GetWebPageAsync(string[] urls);

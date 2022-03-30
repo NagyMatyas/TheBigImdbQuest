@@ -27,7 +27,8 @@ namespace TheBigImdbQuest
 
         public void ImdbQuest()
         {
-            scraper.ScrappingImdb(NrOfMovies);
+            string topListPage = scraper.ScrappingImdb();
+            scraper.ExtractTopListHtml(topListPage, NrOfMovies);
             movies = scraper.Movies;
 
             ReviewPenalizer penalizer = new ReviewPenalizer(Deviation, Deduction);

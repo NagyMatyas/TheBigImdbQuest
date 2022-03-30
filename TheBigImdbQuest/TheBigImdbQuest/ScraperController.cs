@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TheBigImdbQuest
 {
-    class ScraperController : IWebPageGetter
+    public class ScraperController : IWebPageGetter
     {
         public async Task<string> GetWebPageAsync(string url)
         {

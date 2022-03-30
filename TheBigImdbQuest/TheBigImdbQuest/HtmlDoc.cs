@@ -2,7 +2,7 @@
 
 namespace TheBigImdbQuest
 {
-    class HtmlDoc : IHtmlDocument
+    public class HtmlDoc : IHtmlDocument
     {
         HtmlDocument htmlDoc;
 

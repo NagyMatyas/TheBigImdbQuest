@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TheBigImdbQuest
 {
-    class Scraper
+    public class Scraper
     {
         private const int MaximumAllowedSize = 250;
         private const string ImdbBaseUrl = @"https://www.imdb.com";
@@ -16,36 +16,29 @@ namespace TheBigImdbQuest
         private Movie[] movies;
         private readonly IWebPageGetter webPageDownloader;
         private readonly IHtmlDocument htmlDoc;
+        private readonly Dictionary<string, string> XPaths;
 
-        private readonly Dictionary<string, string> XPaths = new Dictionary<string, string>()
-        {
-            ["selectTitles"] = "//tbody//tr//td[@class='titleColumn']//a",
-            ["selectLinks"] = "//tbody//tr//td[@class='titleColumn']//a",
-            ["selectRate"] = "//tbody//tr//td[@class='posterColumn']//span[@name='ir']",
-            ["selectVotes"] = "//tbody//tr//td[@class='posterColumn']//span[@name='nv']",
-            ["selectOscars"] = "//li[@data-testid='award_information']//a",
-        };
-
-        public Scraper(IWebPageGetter webPageDownloader, IHtmlDocument htmlDoc)
+        public Scraper(IWebPageGetter webPageDownloader, IHtmlDocument htmlDoc, Dictionary<string, string> xPaths)
         {
             this.webPageDownloader = webPageDownloader;
             this.htmlDoc = htmlDoc;
+            this.XPaths = xPaths;
         }
 
-        public void ScrappingImdb(int nrOfMovies)
+        public string ScrappingImdb()
         {
-            nrOfMovies = Math.Min(nrOfMovies, MaximumAllowedSize);
-            movies = new Movie[nrOfMovies];
-
             string TopListPageHtml = webPageDownloader.GetWebPageAsync(TopListUrl).Result;
 
-            ExtractTopListHtml(TopListPageHtml);
+            return TopListPageHtml;
         }
 
         public Movie[] Movies { get => movies; }
 
-        private void ExtractTopListHtml(string html)
+        public void ExtractTopListHtml(string html, int nrOfMovies)
         {
+            nrOfMovies = Math.Min(nrOfMovies, MaximumAllowedSize);
+            movies = new Movie[nrOfMovies];
+
             htmlDoc.LoadHtml(html);
 
             string[] titleTopMovies = GetTitles();
@@ -84,10 +77,10 @@ namespace TheBigImdbQuest
         private double[] GetRates()
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectRate"])
-                .Select(n => double.TryParse(n.Attributes["data-value"].Value.Substring(0, 3),
+                .Select(n => double.TryParse(n.Attributes["data-value"].Value,
                                              NumberStyles.Number,
                                              CultureInfo.InvariantCulture,
-                                             out double tmp) ? tmp : 0)
+                                             out double tmp) ? Math.Round(tmp, 1) : 0)
                 .Take(movies.Length).ToArray();
         }
 

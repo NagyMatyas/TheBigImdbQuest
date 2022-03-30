@@ -52,6 +52,7 @@
     <Compile Include="HtmlDoc.cs" />
     <Compile Include="IDataSaver.cs" />
     <Compile Include="IHtmlDocument.cs" />
+    <Compile Include="ImdbXPath.cs" />
     <Compile Include="IWebPageGetter.cs" />
     <Compile Include="Movie.cs" />
     <Compile Include="OscarCalculator.cs" />

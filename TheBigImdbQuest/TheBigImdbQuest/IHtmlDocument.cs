@@ -2,7 +2,7 @@
 
 namespace TheBigImdbQuest
 {
-    interface IHtmlDocument
+    public interface IHtmlDocument
     {
         HtmlNode DocumentNode { get; }
         void LoadHtml(string html);

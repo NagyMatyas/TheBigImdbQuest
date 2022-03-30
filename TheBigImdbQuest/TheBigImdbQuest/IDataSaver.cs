@@ -1,6 +1,6 @@
 ﻿namespace TheBigImdbQuest
 {
-    interface IDataSaver
+    public interface IDataSaver
     {
         void SaveFile(Movie[] movies);
     }
