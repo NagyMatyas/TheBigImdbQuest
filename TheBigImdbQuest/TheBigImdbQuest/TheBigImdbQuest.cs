@@ -14,7 +14,12 @@ namespace TheBigImdbQuest
         readonly IDataSaver saver;
         readonly Scraper scraper;
 
-        public TheBigImdbQuest(Scraper scraper, IDataSaver saver = null)
+        public TheBigImdbQuest(Scraper scraper)
+        {
+            this.scraper = scraper;
+        }
+
+        public TheBigImdbQuest(Scraper scraper, IDataSaver saver)
         {
             this.saver = saver;
             this.scraper = scraper;

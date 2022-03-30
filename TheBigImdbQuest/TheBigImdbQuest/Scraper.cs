@@ -87,7 +87,8 @@ namespace TheBigImdbQuest
         private int[] GetNrOfVotes(HtmlDocument htmlDoc)
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectVotes"])
-                .Select(n => int.TryParse(n.Attributes["data-value"].Value, out int tmp) ? tmp : 0)
+                .Select(n => int.TryParse(n.Attributes["data-value"].Value,
+                                          out int tmp) ? tmp : 0)
                 .Take(movies.Length).ToArray();
         }
 
@@ -112,7 +113,7 @@ namespace TheBigImdbQuest
             {
                 Regex reg = new Regex(@"(\d+)");
                 string oscarNumber = reg.Match(titlesTop.FirstOrDefault()).Groups[0].Value;
-                int.TryParse(oscarNumber, out result);
+                int.TryParse(oscarNumber, NumberStyles.Number, CultureInfo.InvariantCulture, out result);
             }
 
             return result;
