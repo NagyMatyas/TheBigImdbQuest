@@ -11,8 +11,8 @@ namespace TheBigImdbQuest
 
         private Movie[] movies;
 
-        readonly IDataSaver saver;
-        readonly Scraper scraper;
+        private readonly IDataSaver saver;
+        private readonly Scraper scraper;
 
         public TheBigImdbQuest(Scraper scraper)
         {

@@ -15,6 +15,8 @@ namespace TheBigImdbQuest
         private const string TopListUrl = @"https://www.imdb.com/chart/top";
 
         private Movie[] movies;
+        private readonly IWebPageGetter webPageDownloader;
+        private readonly IHtmlDocument htmlDoc;
 
         private readonly Dictionary<string, string> XPaths = new Dictionary<string, string>()
         {
@@ -25,12 +27,18 @@ namespace TheBigImdbQuest
             ["selectOscars"] = "//li[@data-testid='award_information']//a",
         };
 
+        public Scraper(IWebPageGetter webPageDownloader, IHtmlDocument htmlDoc)
+        {
+            this.webPageDownloader = webPageDownloader;
+            this.htmlDoc = htmlDoc;
+        }
+
         public void ScrappingImdb(int nrOfMovies)
         {
             nrOfMovies = Math.Min(nrOfMovies, MaximumAllowedSize);
             movies = new Movie[nrOfMovies];
 
-            string TopListPageHtml = ScraperController.GetUrlAsync(TopListUrl).Result;
+            string TopListPageHtml = webPageDownloader.GetWebPageAsync(TopListUrl).Result;
 
             ExtractTopListHtml(TopListPageHtml);
         }
@@ -39,13 +47,13 @@ namespace TheBigImdbQuest
 
         private void ExtractTopListHtml(string html)
         {
-            HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
 
-            string[] titleTopMovies = GetTitles(htmlDoc);
-            string[] linkTopMovies = GetLinks(htmlDoc);
-            double[] rate = GetRates(htmlDoc);
-            int[] nrOfVotes = GetNrOfVotes(htmlDoc);
+            string[] titleTopMovies = GetTitles();
+            string[] linkTopMovies = GetLinks();
+            double[] rate = GetRates();
+            int[] nrOfVotes = GetNrOfVotes();
+
             int[] oscarList = GetOscars(linkTopMovies);
 
             Parallel.For(0, movies.Length, i =>
@@ -60,31 +68,31 @@ namespace TheBigImdbQuest
             });
         }
 
-        private string[] GetTitles(HtmlDocument htmlDoc)
+        private string[] GetTitles()
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectTitles"])
                 .Select(n => n.InnerText)
                 .Take(movies.Length).ToArray();
         }
 
-        private string[] GetLinks(HtmlDocument htmlDoc)
+        private string[] GetLinks()
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectLinks"])
                 .Select(n => ImdbBaseUrl + n.Attributes["href"].Value)
                 .Take(movies.Length).ToArray();
         }
 
-        private double[] GetRates(HtmlDocument htmlDoc)
+        private double[] GetRates()
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectRate"])
-                .Select(n => double.TryParse(n.Attributes["data-value"].Value.Substring(0,3),
+                .Select(n => double.TryParse(n.Attributes["data-value"].Value.Substring(0, 3),
                                              NumberStyles.Number,
                                              CultureInfo.InvariantCulture,
                                              out double tmp) ? tmp : 0)
                 .Take(movies.Length).ToArray();
         }
 
-        private int[] GetNrOfVotes(HtmlDocument htmlDoc)
+        private int[] GetNrOfVotes()
         {
             return htmlDoc.DocumentNode.SelectNodes(XPaths["selectVotes"])
                 .Select(n => int.TryParse(n.Attributes["data-value"].Value,
@@ -94,14 +102,13 @@ namespace TheBigImdbQuest
 
         private int[] GetOscars(string[] linkTopMovies)
         {
-            return ScraperController.GetUrlAsync(linkTopMovies).Result
+            return webPageDownloader.GetWebPageAsync(linkTopMovies).Result
                 .Where(n => n != null)
                 .Select(n => GetOscars(n)).ToArray();
         }
 
         private int GetOscars(string html)
         {
-            HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
             int result = 0;
 

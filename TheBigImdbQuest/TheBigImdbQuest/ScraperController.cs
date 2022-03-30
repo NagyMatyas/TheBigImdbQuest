@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 namespace TheBigImdbQuest
 {
-    static class ScraperController
+    class ScraperController : IWebPageGetter
     {
-        public static async Task<string> GetUrlAsync(string url)
+        public async Task<string> GetWebPageAsync(string url)
         {
             HttpClient client = new HttpClient();
             var result = client.GetStringAsync(url);
             return await result;
         }
 
-        public static async Task<List<string>> GetUrlAsync(string[] urls)
+        public async Task<List<string>> GetWebPageAsync(string[] urls)
         {
             List<Task<string>> tasks = new List<Task<string>>();
 
@@ -21,7 +21,7 @@ namespace TheBigImdbQuest
             {
                 async Task<string> func()
                 {
-                    return await GetUrlAsync(url);
+                    return await GetWebPageAsync(url);
                 }
 
                 tasks.Add(func());
